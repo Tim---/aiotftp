@@ -90,9 +90,9 @@ class RequestHandler(asyncio.DatagramProtocol):
     def datagram_received(self, data, addr):
         packet = parse(data)
         if not packet.is_request:
-            self.transport.sendto(OPCODE_ERR)
+            self.transport.sendto(OPCODE_ERR, addr)
         elif packet.mode != Mode.OCTET:
-            self.transport.sendto(MODE_ERR)
+            self.transport.sendto(MODE_ERR, addr)
         else:
             self._task_handler = self._loop.create_task(
                 self.start(packet, addr))
